@@ -1,7 +1,7 @@
-import ctypes, ctypes.wintypes as W, struct, subprocess, sys, time, os
+import ctypes, ctypes.wintypes as W, struct, subprocess, sys, os
 from ctypes import c_void_p, c_ulonglong, c_size_t, byref, create_string_buffer, WinDLL
 
-VERSION = "2.0"
+VERSION = "2.1"
 TARGET  = "Ferns.exe"
 
 k32   = WinDLL("kernel32", use_last_error=True)
@@ -189,32 +189,24 @@ def main():
     hr()
     print()
 
-    cycle = 0
-    try:
-        while True:
-            cycle += 1
+    if ds:
+        n = patch_region(h, ds, dsz)
+    else:
+        n = full_writable_scan(h)
 
-            if ds:
-                n = patch_region(h, ds, dsz)
-            else:
-                n = full_writable_scan(h)
-
-            if cycle == 1:
-                if n:
-                    print(f"  patched  {n} value(s)  —  fps cap removed")
-                    print(f"  looping  re-patching every 100ms  (ctrl+c to stop)\n")
-                else:
-                    print("  nothing patched")
-                    print("  the cap value wasn't in .data — trying full scan next pass\n")
-                    ds, dsz = None, 0  # fall back to full scan
-
-            time.sleep(0.1)
-
-    except KeyboardInterrupt:
-        pass
+    if n:
+        print(f"  patched  {n} value(s)  —  fps cap removed")
+    else:
+        # .data came up empty, fall back to full writable scan
+        print("  nothing in .data, running full scan...")
+        n = full_writable_scan(h)
+        if n:
+            print(f"  patched  {n} value(s)  —  fps cap removed")
+        else:
+            print("  nothing found — try running as administrator")
 
     k32.CloseHandle(h)
-    print("\n  stopped.")
+    print()
     input("  press enter to exit ")
 
 
