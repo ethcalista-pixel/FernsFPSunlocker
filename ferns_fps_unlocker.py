@@ -1,25 +1,27 @@
 import ctypes, ctypes.wintypes as W, struct, subprocess, sys, os
 from ctypes import c_void_p, c_ulonglong, c_size_t, byref, create_string_buffer, WinDLL
 
-VERSION = "2.2"
+VERSION = "1.1"
 TARGET  = "Ferns.exe"
 
 k32 = WinDLL("kernel32", use_last_error=True)
 
 PROCESS_ALL = 0x1F0FFF
 MEM_COMMIT  = 0x1000
-PAGE_RW     = 0x04
-PAGE_WC     = 0x08
-PAGE_GUARD  = 0x100
-WRITABLE    = {PAGE_RW, PAGE_WC}
+
+PAGE_READWRITE         = 0x04
+PAGE_WRITECOPY         = 0x08
+PAGE_EXECUTE_READWRITE = 0x40
+PAGE_EXECUTE_WRITECOPY = 0x80
+PAGE_GUARD             = 0x100
+
+WRITABLE = {PAGE_READWRITE, PAGE_WRITECOPY, PAGE_EXECUTE_READWRITE, PAGE_EXECUTE_WRITECOPY}
 
 CAPS = [
     (struct.pack("<f", 1/60.), struct.pack("<f", 1/9999.)),
     (struct.pack("<d", 1/60.), struct.pack("<d", 1/9999.)),
     (struct.pack("<f", 1/30.), struct.pack("<f", 1/9999.)),
     (struct.pack("<d", 1/30.), struct.pack("<d", 1/9999.)),
-    (struct.pack("<f", 1/20.), struct.pack("<f", 1/9999.)),
-    (struct.pack("<d", 1/20.), struct.pack("<d", 1/9999.)),
 ]
 
 
