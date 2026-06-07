@@ -1,0 +1,12 @@
+# Build artifacts (binaries are published via Releases, not committed)
+*.exe
+*.dll
+*.o
+*.obj
+*.log
+
+# Editor / OS cruft
+.vscode/
+*.swp
+Thumbs.db
+desktop.ini

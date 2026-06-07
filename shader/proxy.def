@@ -1,0 +1,7 @@
+LIBRARY dxgi.dll
+EXPORTS
+CreateDXGIFactory                 = Hook_CreateDXGIFactory
+CreateDXGIFactory1                = Hook_CreateDXGIFactory1
+CreateDXGIFactory2                = Hook_CreateDXGIFactory2
+DXGIGetDebugInterface1            = Hook_DXGIGetDebugInterface1
+DXGIDeclareAdapterRemovalSupport  = Hook_DXGIDeclareAdapterRemovalSupport

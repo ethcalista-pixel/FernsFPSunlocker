@@ -1,0 +1,7 @@
+/* Embeds the compiled DXGI proxy shader DLL (built from shader/proxy.c) into
+   the unlocker executable as an RCDATA resource. The unlocker writes this out
+   to the Ferns client folder when "install shader" is pressed.
+
+   dxgi.dll must exist in this directory at build time — build it first from
+   shader/proxy.c (see build.bat / README). */
+SHADER_DLL RCDATA "dxgi.dll"
